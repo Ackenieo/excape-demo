@@ -60,6 +60,18 @@ The API currently provides the following basic endpoints (default port `5000`):
 - `GET /api/ping` - Returns `{"message": "pong"}`
 - `GET /api/get_miao` - Returns `{"message": "miao"}`
 
+## Profile API Notes
+
+- `GET /api/v1/profile` returns a stable personal-center payload for frontend integration.
+- `rankText` now uses the player's accumulated completed-run score for global ranking and returns text like `全球第 N 名`.
+- `achievements` now returns a stable list with runtime-computed `active` states.
+- `avatarUrl` now points to a backend-managed image content endpoint backed by PostgreSQL image storage.
+- `POST /api/v1/profile/avatar` now supports two JSON modes:
+  - select default avatar: `deviceId + defaultImageId`
+  - upload custom avatar: `deviceId + imageBase64 + mimeType`
+- `POST /api/v1/profile/nickname` validates trimmed nickname input, requires 2 to 16 characters, and rejects placeholder values such as `null` or `游客`.
+- Default avatars and custom avatars are both stored in PostgreSQL instead of external image URLs.
+
 ### Sample Requests
 
 ```bash

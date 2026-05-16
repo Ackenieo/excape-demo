@@ -1,1 +1,11 @@
 Flask==3.1.0
+Flask-SQLAlchemy
+Flask-Migrate
+psycopg2-binary
+pg8000
+python-dotenv
+langchain
+langchain-deepseek
+langchain-community
+pydantic
+uuid-utils
