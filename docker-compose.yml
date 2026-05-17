@@ -1,0 +1,44 @@
+services:
+  db:
+    image: ${POSTGRES_IMAGE:-postgres:16}
+    container_name: excape-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-escape}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-escape}
+      POSTGRES_DB: ${POSTGRES_DB:-escape}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-escape} -d ${POSTGRES_DB:-escape}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    container_name: excape-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      FLASK_RUN_HOST: ${FLASK_RUN_HOST:-0.0.0.0}
+      FLASK_RUN_PORT: ${FLASK_RUN_PORT:-8888}
+      FLASK_DEBUG: ${FLASK_DEBUG:-false}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-escape}:${POSTGRES_PASSWORD:-escape}@db:5432/${POSTGRES_DB:-escape}}
+      AVATAR_UPLOAD_DIR: ${AVATAR_UPLOAD_DIR:-/app/uploads/avatars}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      RUN_BOOTSTRAP_DB: ${RUN_BOOTSTRAP_DB:-true}
+      MIGRATION_MAX_TRIES: ${MIGRATION_MAX_TRIES:-10}
+    ports:
+      - "${FLASK_RUN_PORT:-8888}:8888"
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  db_data:

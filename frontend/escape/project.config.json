@@ -1,0 +1,15 @@
+{
+    "setting": {
+        "urlCheck": false,
+        "es6": true,
+        "postcss": true,
+        "minified": true,
+        "newFeature": true,
+        "autoCompile": true,
+        "compileHotReLoad": true,
+        "nativeCompile": true
+    },
+    "appid": "ttbf03c9be21647fc202",
+    "projectname": "escape",
+    "douyinProjectType": "native"
+}
