@@ -4,6 +4,7 @@ Flask-Migrate
 psycopg2-binary
 pg8000
 python-dotenv
+gunicorn
 langchain
 langchain-deepseek
 langchain-community
